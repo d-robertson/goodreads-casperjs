@@ -5,6 +5,14 @@ var casper = require('casper').create({
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
     }
 });
+
+casper.on("remote.message", function(msg){
+  this.echo("remote.msg: " + msg, 'INFO');
+});
+
+casper.on("page.error", function(pageErr){
+  this.echo("page.err: " + JSON.stringify(pageErr), 'ERROR');
+});
  
 //First step is to open goodreads
 casper.start().thenOpen("https://goodreads.com", function() {
@@ -87,7 +95,6 @@ casper.then(function(){
 // submit updated changes
 casper.then(function(){
   this.evaluate(function(){
-    console.log("hit eval");
     document.querySelector('button[class="gr-button longTextPopupForm__submitButton"]').click();
   });
 });
@@ -100,20 +107,13 @@ casper.then(function(){
   });
 });
 
-// trying to query the dom to show Im getting the return I want
-casper.then(function(){
-  // this.evaluate(function(){
-  //   this.echo("in last eval");
-  //   this.echo("title:", document.querySelector('a[href="/book/show/5759.Fight_Club"]').innerHTML);
-  //   this.echo("author:", document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML);
-  //   this.echo("percent:", document.querySelector('small[class="u-displayBlock"]').innerHTML);
-  // });
-  this.evaluate(function(){
-    console.log("in last eval");
-    console.log("title:", document.querySelector('a[href="/book/show/5759.Fight_Club"]').innerHTML);
-    console.log("author:", document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML);
-    console.log("percent:", document.querySelector('small[class="u-displayBlock"]').innerHTML);
-  });
+casper.thenEvaluate(function(){
+  title = document.querySelector('a[class="gr-book__titleLink gr-hyperlink gr-hyperlink--naked"]').innerHTML;
+  author = document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML;
+  percent = document.querySelector('small[class="u-displayBlock"]').innerHTML;
+  console.log("book title: ", title);
+  console.log("Author: ", author);
+  console.log("Percent complete: ", percent);
 });
  
 casper.run();
