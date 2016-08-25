@@ -79,12 +79,15 @@ casper.then(function(){
   this.evaluate(function(){
     document.querySelector('button[class="buttonToggle"]').click();
   });
+  // I was trying to set the value with querySelector but on submit the value wouldn't regester
+  // so I found this sendKeys method and it worked.
   this.sendKeys('input[class="gr-textInput updateReadingProgress__headerInput"]', '27');
 });
 
 // submit updated changes
 casper.then(function(){
   this.evaluate(function(){
+    console.log("hit eval");
     document.querySelector('button[class="gr-button longTextPopupForm__submitButton"]').click();
   });
 });
@@ -94,6 +97,22 @@ casper.then(function(){
   this.wait(3000, function(){
     console.log("Make a screenshot and save it as AfterUpdated.png");
     this.capture('AfterUpdated.png');
+  });
+});
+
+// trying to query the dom to show Im getting the return I want
+casper.then(function(){
+  // this.evaluate(function(){
+  //   this.echo("in last eval");
+  //   this.echo("title:", document.querySelector('a[href="/book/show/5759.Fight_Club"]').innerHTML);
+  //   this.echo("author:", document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML);
+  //   this.echo("percent:", document.querySelector('small[class="u-displayBlock"]').innerHTML);
+  // });
+  this.evaluate(function(){
+    console.log("in last eval");
+    console.log("title:", document.querySelector('a[href="/book/show/5759.Fight_Club"]').innerHTML);
+    console.log("author:", document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML);
+    console.log("percent:", document.querySelector('small[class="u-displayBlock"]').innerHTML);
   });
 });
  
