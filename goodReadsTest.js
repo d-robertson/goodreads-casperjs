@@ -6,6 +6,7 @@ var casper = require('casper').create({
     }
 });
 
+// set up a message listener so I can see my console.logs in my evaluate functions
 casper.on("remote.message", function(msg){
   this.echo("remote.msg: " + msg, 'INFO');
 });
@@ -53,6 +54,10 @@ casper.then(function(){
 });
 
 // simulate click to add book to currently reading
+// here I need to grab all the books returned and check the titles and authors
+//for the correct book, but right now Im just grabbing the first one.
+// I would queryall and loop through the array checking against my search var
+// then return the correct one and click the currently reading button
 casper.then(function(){
   this.evaluate(function(){
     document.querySelector('button[value="currently-reading"]').click();
@@ -75,6 +80,8 @@ casper.then(function(){
 });
 
 // click update status on first book
+// here I also need to loop through my books to make sure Im clicking the correct
+//book. right now Im just clicking the first one.
 casper.then(function(){
   this.evaluate(function(){
     document.querySelector('button[class="gr-nakedButton gr-nakedButton--asLink u-marginTopTiny"]').click();
@@ -107,6 +114,7 @@ casper.then(function(){
   });
 });
 
+// query the dom for title author and reading percent
 casper.thenEvaluate(function(){
   title = document.querySelector('a[class="gr-book__titleLink gr-hyperlink gr-hyperlink--naked"]').innerHTML;
   author = document.querySelector('a[href="https://www.goodreads.com/author/show/2546.Chuck_Palahniuk"]').innerHTML;
