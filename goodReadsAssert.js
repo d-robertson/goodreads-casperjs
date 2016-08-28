@@ -1,3 +1,6 @@
+// set up enviorment variables for password and email
+var envVars = require('system').env;
+
 // create my test suite
 casper.test.begin('test login for good reads and user experience', 4, function suite(test){
   //set up messages that will print to the console
@@ -8,16 +11,18 @@ casper.test.begin('test login for good reads and user experience', 4, function s
   casper.on("page.error", function(pageErr){
     this.echo("page.err: " + JSON.stringify(pageErr), 'ERROR');
   });
+
   // open goodreads.com check to see if the login exists
+  // pass in env vars for evaluate function
   // fill out the login with email and password and simulate a click event to submit
   casper.start("https://goodreads.com", function(){
     test.assertExists('form[name="sign_in"]', 'login form is found.');
 
-    this.evaluate(function(){
-        document.getElementById("userSignInFormEmail").value="dwilliamrobertson@gmail.com";
-        document.getElementById("user_password").value="ruinous3919";
+    this.evaluate(function(email, password){
+        document.getElementById("userSignInFormEmail").value=email;
+        document.getElementById("user_password").value=password;
         document.querySelector('input[value="Sign in"]').click();
-    });
+    }, envVars.email, envVars.password);
   });
   // take a screen shot to show I have logged in
   casper.then(function(){

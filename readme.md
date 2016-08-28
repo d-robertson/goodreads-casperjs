@@ -1,5 +1,9 @@
 #Instalation
   npm install -g phantomjs casperjs
+  create .env file in root of project
+  in the .env 
+    email=(your email for goodreads.com no parenthesis)
+    password=(your password for goodreads.com no parenthesis)
 
 ##To Run
   casperjs test goodReadsAssert.js
